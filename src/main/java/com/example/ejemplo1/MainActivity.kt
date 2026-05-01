@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.weight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -69,58 +70,80 @@ fun CrudApp(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth()
         )
 
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = {
-                if (nombre.isNotBlank()) {
-                    usuarios.add(Usuario(nextId++, nombre.trim()))
-                    mensaje = "Creado: $nombre"
-                    nombre = ""
-                } else {
-                    mensaje = "Ingrese un nombre para crear"
-                }
-            }) {
-                Text("Crear")
-            }
-
-            Button(onClick = {
-                if (usuarios.isNotEmpty()) {
-                    mensaje = "Registros: ${usuarios.size}"
-                } else {
-                    mensaje = "No hay registros para leer"
-                }
-            }) {
-                Text("Leer")
-            }
-
-            Button(onClick = {
-                val actual = seleccionado
-                if (actual != null && nombre.isNotBlank()) {
-                    val index = usuarios.indexOfFirst { it.id == actual.id }
-                    if (index != -1) {
-                        usuarios[index] = actual.copy(nombre = nombre.trim())
-                        mensaje = "Actualizado id ${actual.id}"
-                        seleccionado = null
-                        nombre = ""
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        if (nombre.isNotBlank()) {
+                            usuarios.add(Usuario(nextId++, nombre.trim()))
+                            mensaje = "Creado: $nombre"
+                            nombre = ""
+                        } else {
+                            mensaje = "Ingrese un nombre para crear"
+                        }
                     }
-                } else {
-                    mensaje = "Seleccione y escriba un nombre para actualizar"
+                ) {
+                    Text("Crear")
                 }
-            }) {
-                Text("Actualizar")
+
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        if (usuarios.isNotEmpty()) {
+                            mensaje = "Registros: ${usuarios.size}"
+                        } else {
+                            mensaje = "No hay registros para leer"
+                        }
+                    }
+                ) {
+                    Text("Leer")
+                }
             }
 
-            Button(onClick = {
-                val actual = seleccionado
-                if (actual != null) {
-                    usuarios.removeAll { it.id == actual.id }
-                    mensaje = "Eliminado id ${actual.id}"
-                    seleccionado = null
-                    nombre = ""
-                } else {
-                    mensaje = "Seleccione un registro para eliminar"
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        val actual = seleccionado
+                        if (actual != null && nombre.isNotBlank()) {
+                            val index = usuarios.indexOfFirst { it.id == actual.id }
+                            if (index != -1) {
+                                usuarios[index] = actual.copy(nombre = nombre.trim())
+                                mensaje = "Actualizado id ${actual.id}"
+                                seleccionado = null
+                                nombre = ""
+                            }
+                        } else {
+                            mensaje = "Seleccione y escriba un nombre para actualizar"
+                        }
+                    }
+                ) {
+                    Text("Actualizar")
                 }
-            }) {
-                Text("Eliminar")
+
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        val actual = seleccionado
+                        if (actual != null) {
+                            usuarios.removeAll { it.id == actual.id }
+                            mensaje = "Eliminado id ${actual.id}"
+                            seleccionado = null
+                            nombre = ""
+                        } else {
+                            mensaje = "Seleccione un registro para eliminar"
+                        }
+                    }
+                ) {
+                    Text("Eliminar")
+                }
             }
         }
 
